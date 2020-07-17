@@ -1,0 +1,24 @@
+@media only screen and (min-width: 600px) {
+    #listitem{
+         display: none;
+   }
+   #listitembs{
+       background-color: lightgrey;
+       border-bottom: 1px solid grey;
+   }
+   #listitembs:hover{
+       opacity: 0.2;
+     }
+   }
+   @media only screen and (max-width: 600px) {
+   #listitem{
+        background-color: lightgrey;
+        border-bottom: 1px solid grey;
+   }
+   #listitem:hover{
+     opacity: 0.2;
+   }
+   #listitembs{
+       display: none;
+   }
+   }
