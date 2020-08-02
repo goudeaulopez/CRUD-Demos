@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using demobackend.Models;
+using demobackend.Services;
+using Microsoft.Net.Http.Headers;
 
 namespace demobackend
 {
@@ -14,8 +13,24 @@ namespace demobackend
 	{
 		// This method gets called by the runtime. Use this method to add services to the container.
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
+		readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddMvc();
+			services.AddScoped<IDataService<PersonalDetail>, DataServices<PersonalDetail>>();
+
+			services.AddCors(options =>
+			{
+				options.AddPolicy(name: MyAllowSpecificOrigins,
+								  builder =>
+								  {
+									  builder.WithOrigins("http://localhost:3000/").
+									  WithMethods("GET","POST","UPDATE","DELETE").
+									  WithHeaders(HeaderNames.ContentType);
+								  });
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,8 +40,9 @@ namespace demobackend
 			{
 				app.UseDeveloperExceptionPage();
 			}
-
+			app.UseStaticFiles();
 			app.UseRouting();
+			app.UseCors(MyAllowSpecificOrigins);
 
 			app.UseEndpoints(endpoints =>
 			{
@@ -34,6 +50,7 @@ namespace demobackend
 				{
 					await context.Response.WriteAsync("Hello World!");
 				});
+				endpoints.MapControllers();
 			});
 		}
 	}

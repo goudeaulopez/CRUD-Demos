@@ -16,6 +16,7 @@ class App extends React.Component{
                 <Router history={history}>
                     <Header/>
                     <Switch>
+                       
                         <Route path="/" exact component={List}/>
                         <Route path="/form1/create" component={Create}/>
                         <Route path="/form1/delete/:id" component={Delete}/>
